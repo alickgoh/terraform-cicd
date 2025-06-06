@@ -1,7 +1,16 @@
-echo "# terraform-cicd" >> README.md
-git init
-git add README.md
-git commit -m "Initial Commit"
-git branch -M main
-git remote add origin https://github.com/alickgoh/terraform-cicd.git
-git push -u origin main
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      terraform: 1.0.0
+  pre_build:
+    command:
+      - terraform init
+  build:
+    commands:
+      - terraform plan
+      - terraform apply --auto-approve
+  post_build:
+    commands:
+      - aws s3 sync . s3://${aws_s3_bucket.website_bucket.id} --exclude ".git/*" --exclude "main.tf" --exclude "buildspec.yml"
