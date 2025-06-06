@@ -47,3 +47,8 @@ resource "aws_s3_bucket_policy" "bucket_policy" {
     ]
   })
 }
+# Output the name of the S3 bucket
+output "website_bucket_name" {
+  value = aws_s3_bucket.website_bucket.id
+  description = "The name of the S3 bucket for the website."
+}
